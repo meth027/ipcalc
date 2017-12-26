@@ -5,6 +5,7 @@ The input is CIDR IP address with network mask.
 For 192.168.1.1/20 the output looks like this:
 
 IP address: 192.168.1.1
+
 Network:
 192      168      0        0       
 11000000 10101000 00000001 00000001

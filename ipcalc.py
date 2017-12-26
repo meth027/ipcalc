@@ -10,7 +10,7 @@ def ip_split(ipaddr):
     if int(i) < 256:
       ipl.append(int(i))
     else:
-      return ("You entered wrong ip address. Check your input and try again")
+      pass
   return ipl
 
 
@@ -23,13 +23,12 @@ def ip2bin(ipaddr):
   binIpNew = [str(binIp[0]).rjust(8,"0"),str(binIp[1]).rjust(8,"0"),str(binIp[2]).rjust(8,"0"),str(binIp[3]).rjust(8,"0")]
   return binIpNew
 
-
 def mask_validator(mask):
   m = int(mask)
   if m < 33:
     return m
   else:
-    return ("You entered wrong subnet mask. Check your input and try again")
+    pass
 
 
 def mask2bin(mask):
@@ -78,21 +77,30 @@ def minhost_counter(network):
 
 def total_hosts(mask):
   a = mask
-  total = 2 ** (32-a)
+  total = abs((2 ** (32-a))-2)
   return total
 
 # variables here:
-source_ip = ip_split(IP[0])
-binIpAddr = ip2bin(source_ip)
-mask = mask_validator(IP[1])
-binMask = mask2bin(mask)
-decMask = mask255(binMask)
-wildMask = wildcard_maker(binMask)
-ntCalc = networkCalc(binIpAddr,binMask)
-broadcast = broadcast_counter(ntCalc,wildMask)
-max_host = maxhost_counter(broadcast)
-min_host = minhost_counter(ntCalc)
-hosts = total_hosts(mask)
+try:
+ source_ip = ip_split(IP[0])
+ binIpAddr = ip2bin(source_ip)
+ mask = mask_validator(IP[1])
+ binMask = mask2bin(mask)
+ decMask = mask255(binMask)
+ wildMask = wildcard_maker(binMask)
+ ntCalc = networkCalc(binIpAddr,binMask)
+ broadcast = broadcast_counter(ntCalc,wildMask)
+ max_host = maxhost_counter(broadcast)
+ min_host = minhost_counter(ntCalc)
+ hosts = total_hosts(mask)
+except IndexError:
+  print ("You entered wrong IP address. Check your input and try again")
+except TypeError:
+  print ("You entered wrong IP address. Check your input and try again")
+except ValueError:
+  print ("You entered wrong IP address. Check your input and try again")
+except NameError:
+  print ("You entered wrong IP address. Check your input and try again")
 # /variables -----------
 
 def ipCalculator():
@@ -104,10 +112,13 @@ def ipCalculator():
   print ("/" + str(mask))
   print (str(decMask[0]).ljust(8),str(decMask[1]).ljust(8),str(decMask[2]).ljust(8),str(decMask[3]).ljust(8))
   print (binMask[0],binMask[1],binMask[2],binMask[3]+"\n")
-  print ("First host: " + str(min_host[0]) + "." + str(min_host[1]) + "." + str(min_host[2]) + "." + str(min_host[3]))
-  print ("Last host:  " + str(max_host[0]) + "." + str(max_host[1]) + "." + str(max_host[2]) + "." + str(max_host[3]))
-  print ("Broadcast:  " + str(broadcast[0]) + "." + str(broadcast[1]) + "." + str(broadcast[2]) + "." + str(broadcast[3]))
-  print ("Maximum hosts: " + str(hosts))
+  if mask == 32:
+    pass
+  else:
+    print ("First host: " + str(min_host[0]) + "." + str(min_host[1]) + "." + str(min_host[2]) + "." + str(min_host[3]))
+    print ("Last host:  " + str(max_host[0]) + "." + str(max_host[1]) + "." + str(max_host[2]) + "." + str(max_host[3]))
+    print ("Broadcast:  " + str(broadcast[0]) + "." + str(broadcast[1]) + "." + str(broadcast[2]) + "." + str(broadcast[3]))
+    print ("Maximum hosts: " + str(hosts))
   return 
-  
+
 ipCalculator()

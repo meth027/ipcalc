@@ -1,4 +1,4 @@
-r_input = "192.168.1.1/20"
+r_input = input("Enter IPv4 CIDR address: ")
 IP = r_input
 IP = IP.split("/")
 
@@ -13,7 +13,6 @@ def ip_split(ipaddr):
       return ("You entered wrong ip address. Check your input and try again")
   return ipl
 
-source_ip = ip_split(IP[0])
 
 def ip2bin(ipaddr):
   binIp = []
@@ -24,7 +23,6 @@ def ip2bin(ipaddr):
   binIpNew = [str(binIp[0]).rjust(8,"0"),str(binIp[1]).rjust(8,"0"),str(binIp[2]).rjust(8,"0"),str(binIp[3]).rjust(8,"0")]
   return binIpNew
 
-binIpAddr = ip2bin(source_ip)
 
 def mask_validator(mask):
   m = int(mask)
@@ -33,7 +31,6 @@ def mask_validator(mask):
   else:
     return ("You entered wrong subnet mask. Check your input and try again")
 
-mask = mask_validator(IP[1])
 
 def mask2bin(mask):
   bin_mask = int(mask)*"1"
@@ -41,7 +38,6 @@ def mask2bin(mask):
   bitmask = [bitmask[0:8],bitmask[8:16],bitmask[16:24],bitmask[24:32]]
   return bitmask
 
-binMask = mask2bin(mask)
 
 def mask255(binaryMask):
   a = binaryMask
@@ -53,10 +49,6 @@ def wildcard_maker(binaryMask):
   mask = [255 - int(a[0],2),255 - int(a[1],2),255 - int(a[2],2),255 - int(a[3],2)]
   return mask
 
-decMask = mask255(binMask)
-wildMask = wildcard_maker(binMask)
-wildMaskBin = ip2bin(wildMask)
-
 
 def networkCalc(binaryIP,binaryMask):
   a = binaryIP
@@ -64,7 +56,6 @@ def networkCalc(binaryIP,binaryMask):
   network = [int(a[0],2) & int(b[0],2),int(a[1],2) & int(b[1],2),int(a[2],2) & int(b[2],2),int(a[3],2) & int(b[3],2)]
   return network
 
-ntCalc = networkCalc(binIpAddr,binMask)
 
 def broadcast_counter(ntCalc,wildMask):
   a = ntCalc
@@ -72,38 +63,51 @@ def broadcast_counter(ntCalc,wildMask):
   counter = [a[0]+b[0],a[1]+b[1],a[2]+b[2],a[3]+b[3]]
   return counter
 
-broadcast = broadcast_counter(ntCalc,wildMask)
 
 def maxhost_counter(broadcast):
   a = broadcast
   max_host = [a[0],a[1],a[2],(a[3]-1)]
   return max_host
 
-max_host = maxhost_counter(broadcast)
 
 def minhost_counter(network):
   a = network
   min_host = [a[0],a[1],a[2],(a[3]+1)]
   return min_host
 
-min_host = minhost_counter(ntCalc)
 
 def total_hosts(mask):
   a = mask
   total = 2 ** (32-a)
   return total
 
+# variables here:
+source_ip = ip_split(IP[0])
+binIpAddr = ip2bin(source_ip)
+mask = mask_validator(IP[1])
+binMask = mask2bin(mask)
+decMask = mask255(binMask)
+wildMask = wildcard_maker(binMask)
+ntCalc = networkCalc(binIpAddr,binMask)
+broadcast = broadcast_counter(ntCalc,wildMask)
+max_host = maxhost_counter(broadcast)
+min_host = minhost_counter(ntCalc)
 hosts = total_hosts(mask)
+# /variables -----------
 
-print (source_ip)
-print (binIpAddr)
-print (mask)
-print (binMask)
-print (ntCalc)
-print (decMask)
-print (wildMask)
-print (wildMaskBin)
-print (broadcast)
-print (max_host)
-print (min_host)
-print (hosts)
+def ipCalculator():
+  print ("IP address: " + str(source_ip[0]) + "." + str(source_ip[1]) + "." + str(source_ip[2]) + "." + str(source_ip[3]))
+  print ("Network:")
+  print (str(ntCalc[0]).ljust(8),str(ntCalc[1]).ljust(8),str(ntCalc[2]).ljust(8),str(ntCalc[3]).ljust(8))
+  print (binIpAddr[0],binIpAddr[1],binIpAddr[2],binIpAddr[3]+"\n")
+  print ("Mask:")
+  print ("/" + str(mask))
+  print (str(decMask[0]).ljust(8),str(decMask[1]).ljust(8),str(decMask[2]).ljust(8),str(decMask[3]).ljust(8))
+  print (binMask[0],binMask[1],binMask[2],binMask[3]+"\n")
+  print ("First host: " + str(min_host[0]) + "." + str(min_host[1]) + "." + str(min_host[2]) + "." + str(min_host[3]))
+  print ("Last host:  " + str(max_host[0]) + "." + str(max_host[1]) + "." + str(max_host[2]) + "." + str(max_host[3]))
+  print ("Broadcast:  " + str(broadcast[0]) + "." + str(broadcast[1]) + "." + str(broadcast[2]) + "." + str(broadcast[3]))
+  print ("Maximum hosts: " + str(hosts))
+  return 
+  
+ipCalculator()

@@ -76,9 +76,14 @@ def minhost_counter(network):
 
 
 def total_hosts(mask):
-  a = mask
-  total = abs((2 ** (32-a))-2)
-  return total
+  a = int(mask)
+  if a == 31:
+    return 2
+  elif a == 32:
+    return 0
+  else:
+    total = 2 ** (32-a)-2
+    return total
 
 # variables here:
 try:
@@ -114,6 +119,11 @@ def ipCalculator():
   print (binMask[0],binMask[1],binMask[2],binMask[3]+"\n")
   if mask == 32:
     pass
+  elif mask == 31:
+    print ("First host: " + str(min_host[0]) + "." + str(min_host[1]) + "." + str(min_host[2]) + "." + str(min_host[3]-1))
+    print ("Last host:  " + str(max_host[0]) + "." + str(max_host[1]) + "." + str(max_host[2]) + "." + str(max_host[3]+1))
+    print ("Broadcast:  " + str(broadcast[0]) + "." + str(broadcast[1]) + "." + str(broadcast[2]) + "." + str(broadcast[3]))
+    print ("Maximum hosts: " + str(hosts))    
   else:
     print ("First host: " + str(min_host[0]) + "." + str(min_host[1]) + "." + str(min_host[2]) + "." + str(min_host[3]))
     print ("Last host:  " + str(max_host[0]) + "." + str(max_host[1]) + "." + str(max_host[2]) + "." + str(max_host[3]))
@@ -122,3 +132,4 @@ def ipCalculator():
   return 
 
 ipCalculator()
+

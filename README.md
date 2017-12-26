@@ -20,4 +20,4 @@ Last host:  192.168.15.254
 Broadcast:  192.168.15.255
 Maximum hosts: 4096
 
-So, it's just easy way to make IP-calculator with Python3
+So, it's just easy way to make IP-calculator with Python3.

@@ -1,4 +1,4 @@
-r_input = input("Enter IPv4 CIDR address: ")
+r_input = input("Enter IPv4 CIDR address [x.x.x.x/xx]: ")
 IP = r_input
 IP = IP.split("/")
 
